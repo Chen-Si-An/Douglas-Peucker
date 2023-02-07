@@ -2,6 +2,7 @@
 [Dd]ebug/
 [Rr]elease/
 x64/
+.vs/
 
 [Ext]
 *.pdb

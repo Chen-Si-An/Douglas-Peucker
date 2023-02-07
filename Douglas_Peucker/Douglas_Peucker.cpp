@@ -100,7 +100,7 @@ vector<Dot> ReadPoints(string strPath)
 	fin.open(strPath, ios::in);
 
 	vector<Dot> vecPoints;
-	double dX, dY, dZ;
+	double dX, dY, dZ = 0.;
 	char ch;
 	//Ignore Z
 	//while (fin >> dX >> ch >> dY >> ch >> dZ)
