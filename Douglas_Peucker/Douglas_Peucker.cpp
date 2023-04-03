@@ -37,14 +37,15 @@ int main()
 	return 0;
 }
 
+//Compute the square of the perpendicular distance of a point to a specific line 
 double PerpDist(Dot dotSrc, Dot dotStart, Dot dotEnd)
 {
 	double dA, dB, dC;
 	if (fabs(dotStart.m_x - dotEnd.m_x) < 1.e-7)
 	{
-		dA = 0.;
-		dB = 1.;
-		dC = -dotStart.m_y;
+		dA = 1.;
+		dB = 0.;
+		dC = -dotStart.m_x;
 	}
 	else
 	{
