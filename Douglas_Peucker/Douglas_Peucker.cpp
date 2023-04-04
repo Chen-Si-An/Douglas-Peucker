@@ -1,6 +1,7 @@
 ﻿// Douglas_Peucker.cpp : 此檔案包含 'main' 函式。程式會於該處開始執行及結束執行。
 //
 
+#include <Windows.h>
 #include <iostream>
 #include <math.h>
 #include <vector>
@@ -23,15 +24,21 @@ struct Dot
 };
 
 double PerpDist(Dot dotSrc, Dot dotStart, Dot dotEnd);
-vector<Dot> DouglasPeucker(const vector<Dot> &vecPoints, double dEpsilon = 0.003);
-vector<Dot> ReadPoints(string strPath);
-void WritePoints(string strPath, vector<Dot> vecPoints);
+vector<Dot> DouglasPeucker(const vector<Dot> &vecPoints, double dEpsilon);
+vector<Dot> ReadPoints(const wstring &strPath);
+void WritePoints(const wstring &strPath, vector<Dot> vecPoints);
 
 int main()
 {
-	vector<Dot> vecPoints = ReadPoints("D:\\Allen\\Data\\txt\\Contour.txt");
-	vector<Dot> vecDP = DouglasPeucker(vecPoints);
-	WritePoints("D:\\Allen\\Data\\txt\\Contour_DP.txt", vecDP);
+	TCHAR chBuf[MAX_PATH];
+	GetModuleFileNameW(NULL, chBuf, MAX_PATH);
+	wstring strPath(chBuf);
+	size_t iPos = strPath.find_last_of(L"\\/");
+	strPath = strPath.substr(0, iPos);
+
+	vector<Dot> vecPoints = ReadPoints(strPath + L"\\Contour.txt");
+	vector<Dot> vecDP = DouglasPeucker(vecPoints, 0.03);
+	WritePoints(strPath + L"\\Contour_DP.txt", vecDP);
 
 	system("pause");
 	return 0;
@@ -95,14 +102,14 @@ vector<Dot> DouglasPeucker(const vector<Dot> &vecPoints, double dEpsilon)
 	return vecRet;
 }
 
-vector<Dot> ReadPoints(string strPath)
+vector<Dot> ReadPoints(const wstring &strPath)
 {
-	ifstream fin;
+	wifstream fin;
 	fin.open(strPath, ios::in);
 
 	vector<Dot> vecPoints;
 	double dX, dY, dZ = 0.;
-	char ch;
+	TCHAR ch;
 	//Ignore Z
 	//while (fin >> dX >> ch >> dY >> ch >> dZ)
 	while (fin >> dX >> ch >> dY)
@@ -114,15 +121,15 @@ vector<Dot> ReadPoints(string strPath)
 	return vecPoints;
 }
 
-void WritePoints(string strPath, vector<Dot> vecPoints)
+void WritePoints(const wstring &strPath, vector<Dot> vecPoints)
 {
-	ofstream fout;
+	wofstream fout;
 	fout.open(strPath, ios::out);
 
 	for (int i = 0; i < (int)vecPoints.size(); i++)
 		//Ignore Z
 		//fout << vecPoints[i].m_x << "," << vecPoints[i].m_y << "," << vecPoints[i].m_z << endl;
-		fout << vecPoints[i].m_x << "," << vecPoints[i].m_y << endl;
+		fout << vecPoints[i].m_x << L"," << vecPoints[i].m_y << endl;
 		//Ignore Z
 
 	fout.close();
